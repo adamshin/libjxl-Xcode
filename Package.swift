@@ -9,26 +9,13 @@ let package = Package(
         .macOS(.v10_11), .iOS(.v9), .tvOS(.v9), .watchOS(.v2)
     ],
     products: [
-        // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
             name: "libjxl",
-            targets: ["libjxl"]),
-        .library(
-            name: "brotli",
-            targets: ["brotli"]),
-        .library(
-            name: "hwy",
-            targets: ["hwy"]),
-        .library(
-            name: "lcms",
-            targets: ["lcms"])
+            targets: ["libjxl"]
+        )
     ],
-    dependencies: [
-        // Dependencies declare other packages that this package depends on.
-    ],
+    dependencies: [],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "libjxl",
             dependencies: ["brotli", "hwy", "lcms"],
@@ -103,15 +90,18 @@ let package = Package(
                      ],
             sources: ["libjxl/lib/jxl"],
             publicHeadersPath: "include",
-            cSettings: [.headerSearchPath("libjxl"),
-                        .define("CMS_NO_REGISTER_KEYWORD")]
+            cSettings: [
+                .headerSearchPath("libjxl"),
+                .define("CMS_NO_REGISTER_KEYWORD")
+            ],
+            swiftSettings: [.interoperabilityMode(.Cxx)]
         ),
         .target(
             name: "brotli",
             path: "libjxl/third_party/brotli/c",
             exclude: ["fuzz", "tools"],
             publicHeadersPath: "include"
-            ),
+        ),
         .target(
             name: "hwy",
             path: "libjxl/third_party/highway",
@@ -122,14 +112,14 @@ let package = Package(
                      "hwy/targets_test.cc",
                      "hwy/base_test.cc"],
             publicHeadersPath: "."
-            ),
+        ),
         .target(
             name: "lcms",
             path: "libjxl/third_party/lcms",
             exclude: [],
             sources: ["src"],
             publicHeadersPath: "include"
-            )
+        )
     ],
     cLanguageStandard: .gnu11,
     cxxLanguageStandard: .gnucxx14
